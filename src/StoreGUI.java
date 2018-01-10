@@ -27,6 +27,12 @@ import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * The main interface of a convenience store. 
+ * 
+ * @author Eric Li
+ * @version 1.0 2018-01-10
+ */
 public class StoreGUI extends JFrame {
 
 	private JPanel contentPane;
