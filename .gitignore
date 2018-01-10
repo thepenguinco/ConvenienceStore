@@ -1,0 +1,15 @@
+# ECLIPSE GITIGNORE
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.classpath
+.project
+.loadpath
+.recommenders
+.recommenders/
