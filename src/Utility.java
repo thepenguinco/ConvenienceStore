@@ -6,7 +6,11 @@
  */
 public class Utility 
 {
-	// TODO
+	/**
+	 * The delimiter for a space in the file database.
+	 */
+	public static final String MAGIC_SPACE = "\\s";
+	
     /**
      * Formats numbers to two decimal places for displaying prices.
      * 
@@ -17,4 +21,6 @@ public class Utility
     {
         return String.format("%.2f", number);
     }
+    
+    
 }

@@ -6,48 +6,51 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
- * An inventory belonging to a convenience store.
+ * A transaction performed at the convenience store.
  * 
  * @author Eric Li
  * @version 1.0 2018-01-10
  */
-public class Inventory 
+public class Receipt
 {
 	// class fields
 
+
+
 	/**
-	 * The delimiter for a space in the file database.
+	 * The valid number of tokens per line for 
 	 */
-	public static final String MAGIC_SPACE = "\\s";
+	public static final int RECEIPT_INFORMATION = 2;
 	
 	/**
-	 * The valid number of line tokens per line in the file database.
+	 * The valid number of tokens per line for an item in a receipt.
 	 */
-	public static int VALID_LINE_LENGTH = 5;
+	public static final int ITEM_LENGTH = 5;
 
 	// instance fields
 
-	private ArrayList<Item> inventoryList;
+	private double totalCost;
+	private ArrayList<Item> purchasedItems;
 
 	// constructors
 
 	/**
-	 * Constructs an empty inventory list
+	 * Constructs an empty receipt.
 	 */
-	public Inventory()
+	public Receipt()
 	{
-		inventoryList = new ArrayList<Item>();
+		purchasedItems = new ArrayList<Item>();
 	} // end of constructor Account()
 
 	/**
-	 * Constructs a inventory list from a file database.
+	 * Constructs a receipt from a file database.
 	 * 
 	 * @param fileName the file name of the database
 	 * @throws IOException
 	 */
-	public Inventory(final String fileName) throws IOException
+	public Receipt(final String fileName) throws IOException
 	{
-		inventoryList = new ArrayList<Item>();
+		purchasedItems = new ArrayList<Item>();
 
 		// Establish connections to the text files
 		BufferedReader database = new BufferedReader(new FileReader(fileName));
@@ -61,15 +64,10 @@ public class Inventory
 			if (lineOfText == null) break;
 			// System.out.println(lineOfText);
 			String[] line = lineOfText.split(" ");
-			if (line.length == VALID_LINE_LENGTH)
+			if (line.length == RECEIPT_INFORMATION)
 			{
-				String name = line[0].replace(MAGIC_SPACE, " ");
-				String type = line[1].replace(MAGIC_SPACE, " ");
-				double price = Double.parseDouble(line[2]);
-				int quantity = Integer.parseInt(line[3]);
-				double costPerUnit = Double.parseDouble(line[4]);
-				Item item = new Item();
-				inventoryList.add(item);
+				int item = 
+				int item = 
 			} // end of if (line.length ...
 			else 
 			{
@@ -140,8 +138,8 @@ public class Inventory
 		// Populate database
 		for (Item item : inventoryList)
 		{
-			database.println(item.getName().replace(" ", Utility.MAGIC_SPACE)
-					+ " " + item.getType().replace(" ", Utility.MAGIC_SPACE)
+			database.println(item.getName().replace(" ", MAGIC_SPACE)
+					+ " " + item.getType().replace(" ", MAGIC_SPACE)
 					+ " " + item.getPrice()
 					+ " " + item.getQuantity()
 					+ " " + item.getCostPerUnit());
@@ -150,4 +148,5 @@ public class Inventory
 		// wrap up
 		database.close();
 	} // end of method saveInventory(final String fileName...
+	// Handle purchases and sales, fileIO this
 }
