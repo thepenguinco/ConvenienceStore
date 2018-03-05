@@ -129,7 +129,7 @@ public class StoreGUI extends JFrame
 	private void editItemDialogBox(Item item) {
 		JTextField name = new JTextField(item.getItemName());
 		JTextField type = new JTextField(item.getType());
-		JTextField quantity = new JTextField(item.getQuantity());
+		JTextField quantity = new JTextField(Integer.toString(item.getQuantity()));
 		JTextField price = new JTextField(Double.toString(item.getPrice()));
 		Object[] message = {
 				"Name:", name,
@@ -165,8 +165,8 @@ public class StoreGUI extends JFrame
 					{
 						item.setName(name.getText());
 						item.setType(type.getText());
-						item.setQuantity(quantity.getText());
-						item.setPrice(price.getText());
+						item.setQuantity(Integer.parseInt(quantity.getText()));
+						item.setPrice(Double.parseDouble(price.getText()));
 						model.refreshTable(inventoryList);
 						break;
 					}

@@ -75,7 +75,7 @@ public class Item
     }
     
     /**
-     * Returns the quantity in stock of this item
+     * Returns the quantity in stock of this item.
      * 
      * @return the quantity in stock of this item
      */
@@ -85,7 +85,7 @@ public class Item
     } // end of method getQuantity()
     
     /**
-     * Returns the type of this item
+     * Returns the type of this item.
      * 
      * @return the type of this item
      */
@@ -97,7 +97,7 @@ public class Item
     // mutators
     
     /**
-     * Adds the specified quantity to stock
+     * Adds the specified quantity to stock.
      * 
      * @pre specified quantity must be a non-negative integer
      */
@@ -107,30 +107,30 @@ public class Item
     		{
     			this.quantity = this.quantity + quantity;
     		}
-    } // end of method addQuantity 
+    } // end of method addQuantity(int quantity) 
     
     /**
-     * Sets the cost per unit of this item
+     * Sets the cost per unit of this item.
      * 
      * @param cost the cost per unit of this item
      */
     public void setCostPerUnit(int cost)
     	{
     		this.costPerUnit = cost;
-    }
+    } // end of method setCostPerUnit(int cost)
     
     /**
-     * Sets the name of this item
+     * Sets the name of this item.
      * 
      * @param name the name of this item
      */
     public void setName(String name)
     	{
     		this.name = name;
-    }
+    } // end of sertName(String name)
     
     /**
-     * Sets the type of this item
+     * Sets the type of this item.
      * 
      * @param type the type of this item
      */
@@ -140,7 +140,7 @@ public class Item
     } // end of method setType()
     
     /**
-     * Sets the quantity of this item to the specified quantity
+     * Sets the quantity of this item to the specified quantity.
      * 
      * @pre specified quantity must be a non-negative integer
      */
@@ -151,6 +151,15 @@ public class Item
     			this.quantity = quantity;
     		}
     } // end of method setQuantity(int quantity)
+
+    // TODO JAVADOC
+	public void setPrice(double price) 
+	{
+		if (price > 0)
+		{
+			this.price = price;
+		}
+	}
     
     /**
      * Removes the specified quantity from stock
@@ -163,17 +172,5 @@ public class Item
 		{
 			this.quantity = this.quantity - quantity;
 		}
-    } // end of removeQuantity(int quantity)
-
-	public void setQuantity(String text) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setPrice(String text) {
-		// TODO Auto-generated method stub
-		
-	}
-    
-    
+    } // end of removeQuantity(int quantity) 
 }
