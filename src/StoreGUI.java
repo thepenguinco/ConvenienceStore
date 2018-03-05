@@ -365,7 +365,7 @@ public class StoreGUI extends JFrame
 				}
 				catch (ArrayIndexOutOfBoundsException exception)
 				{
-					System.out.println("Table is empty!");
+					System.out.println("No row is selected!");
 				}
 			}
 		});
@@ -381,11 +381,13 @@ public class StoreGUI extends JFrame
 			{
 				try
 				{
-					editItemDialogBox(model.getItemData(table.getSelectedRow()));
+					//TODO
+					deleteItemDialogBox(model.getItemData(table.getSelectedRow()));
+					model.refreshTable(inventoryList);
 				}
 				catch (ArrayIndexOutOfBoundsException exception)
 				{
-					System.out.println("Table is empty!");
+					System.out.println("No row is selected!");
 				}
 			}
 		});
