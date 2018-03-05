@@ -1,3 +1,5 @@
+import java.text.NumberFormat;
+
 /**
  * A utility class for the convenience store.
  * 
@@ -11,6 +13,10 @@ public class Utility
 	 */
 	public static final String MAGIC_SPACE = "\\s";
 	
+	/**
+	 * Format currency numbers to two decimal places
+	 */
+	public final static NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
     /**
      * Formats numbers to two decimal places for displaying prices.
      * 

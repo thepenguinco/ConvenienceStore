@@ -23,7 +23,7 @@ public class Inventory
 	/**
 	 * The valid number of line tokens per line in the file database.
 	 */
-	public static int VALID_LINE_LENGTH = 5;
+	public static int VALID_LINE_LENGTH = 4;
 
 	// instance fields
 
@@ -65,10 +65,10 @@ public class Inventory
 			{
 				String name = line[0].replace(MAGIC_SPACE, " ");
 				String type = line[1].replace(MAGIC_SPACE, " ");
-				double price = Double.parseDouble(line[2]);
-				int quantity = Integer.parseInt(line[3]);
-				double costPerUnit = Double.parseDouble(line[4]);
-				Item item = new Item();
+				int quantity = Integer.parseInt(line[2]);
+				double price = Double.parseDouble(line[3]);
+				// double costPerUnit = Double.parseDouble(line[4]);
+				Item item = new Item(name, type, quantity, price);
 				inventoryList.add(item);
 			} // end of if (line.length ...
 			else 
@@ -140,11 +140,11 @@ public class Inventory
 		// Populate database
 		for (Item item : inventoryList)
 		{
-			database.println(item.getName().replace(" ", Utility.MAGIC_SPACE)
+			database.println(item.getItemName().replace(" ", Utility.MAGIC_SPACE)
 					+ " " + item.getType().replace(" ", Utility.MAGIC_SPACE)
-					+ " " + item.getPrice()
 					+ " " + item.getQuantity()
-					+ " " + item.getCostPerUnit());
+					+ " " + item.getPrice()
+					/*+ " " + item.getCostPerUnit()*/);
 		} // not done
 
 		// wrap up

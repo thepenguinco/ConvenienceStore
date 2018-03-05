@@ -28,7 +28,8 @@ public class Receipt
 	public static final int ITEM_LENGTH = 5;
 
 	// instance fields
-
+	
+	private long timestamp;
 	private double totalCost;
 	private ArrayList<Item> purchasedItems;
 
@@ -39,6 +40,7 @@ public class Receipt
 	 */
 	public Receipt()
 	{
+		timestamp = System.currentTimeMillis();
 		purchasedItems = new ArrayList<Item>();
 	} // end of constructor Account()
 
@@ -66,9 +68,13 @@ public class Receipt
 			String[] line = lineOfText.split(" ");
 			if (line.length == RECEIPT_INFORMATION)
 			{
-				int item = 
-				int item = 
+				timestamp = Long.parseLong(line[0]);
+				totalCost = Double.parseDouble(line[1]);
 			} // end of if (line.length ...
+			else if (line.length == ITEM_LENGTH)
+			{
+				Item item = new Item()
+			}
 			else 
 			{
 				System.out.println("Your database is corrupt!");
@@ -88,7 +94,7 @@ public class Receipt
 	 */
 	public ArrayList<Item> getInventoryList()
 	{
-		return inventoryList;
+		return purchasedItems;
 	} // end of method getInventoryList()
 
 	/**

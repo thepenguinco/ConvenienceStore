@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * A generic item that is processed by a convenience store.
+ * An item belonging to the convenience store inventory.
  * 
  * @author Eric Li
  * @version 1.0 2018-01-10
@@ -12,7 +12,7 @@ public class Item
 
     // instance fields
     
-	private double costPerUnit;
+	private double costPerUnit; // TODO
 	private String name;
 	private double price;
 	private int quantity;
@@ -21,17 +21,26 @@ public class Item
     // constructors
     
     /**
-     * Constructs an item with default characteristics
+     * Constructs a store item with default characteristics
      */
     public Item()
     {
-    		this.costPerUnit = 0;
     		this.name = "";
     		this.price = 0;
     		this.quantity = 0;
     		this.type = "";
-    	
-    } // end of default constructor StoreItem()
+    } // end of default constructor Item()
+    
+    /**
+     * Constructs a store item with the specified characteristics
+     */
+    public Item(String name, String type, int quantity, double price)
+    {
+    		this.name = name;
+    		this.price = price;
+    		this.quantity = quantity;
+    		this.type = type;
+    } // end of constructor StoreItem(String name...
     
     // accessors
     
@@ -50,7 +59,7 @@ public class Item
      * 
      * @return the name of this item
      */
-    public String getName() 
+    public String getItemName() 
     {
     		return name;
     }
@@ -108,7 +117,7 @@ public class Item
     public void setCostPerUnit(int cost)
     	{
     		this.costPerUnit = cost;
-    } // end of method setCostPerUnit(int cost)
+    }
     
     /**
      * Sets the name of this item
@@ -118,7 +127,7 @@ public class Item
     public void setName(String name)
     	{
     		this.name = name;
-    } // end of method setName(String name)
+    }
     
     /**
      * Sets the type of this item
@@ -155,7 +164,16 @@ public class Item
 			this.quantity = this.quantity - quantity;
 		}
     } // end of removeQuantity(int quantity)
+
+	public void setQuantity(String text) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setPrice(String text) {
+		// TODO Auto-generated method stub
+		
+	}
     
     
 }
-
