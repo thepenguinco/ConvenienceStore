@@ -17,6 +17,7 @@ public class Utility
 	 * Format currency numbers to two decimal places
 	 */
 	public final static NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
+	
     /**
      * Formats numbers to two decimal places for displaying prices.
      * 

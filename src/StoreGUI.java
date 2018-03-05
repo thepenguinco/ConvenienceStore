@@ -148,7 +148,7 @@ public class StoreGUI extends JFrame
 					{
 						JOptionPane.showMessageDialog(frame, "You cannot leave the name empty.", "Error", JOptionPane.ERROR_MESSAGE);
 					} 
-					// dropdown is better
+					// USE INHERITANCE
 					else if (type.getText().isEmpty())
 					{
 						JOptionPane.showMessageDialog(frame, "You cannot leave the type empty.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -218,7 +218,7 @@ public class StoreGUI extends JFrame
 		contentPane.setLayout(null);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 624, 441);
+		tabbedPane.setBounds(0, 0, 640, 441);
 		contentPane.add(tabbedPane);
 
 		JPanel inventoryPanel = new JPanel();
@@ -375,14 +375,15 @@ public class StoreGUI extends JFrame
 		inventoryPanel.add(deleteButton);
 		
 		// Delete Button ActionListener
-		editButton.addActionListener(new ActionListener() 
+		deleteButton.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
 				try
 				{
-					//TODO
-					deleteItemDialogBox(model.getItemData(table.getSelectedRow()));
+					// PROMPT DIALOG BOX TODO
+					model.removeRow(table.getSelectedRow());
+					inventoryList.set(model.getRowData());
 					model.refreshTable(inventoryList);
 				}
 				catch (ArrayIndexOutOfBoundsException exception)

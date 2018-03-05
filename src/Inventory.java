@@ -150,4 +150,9 @@ public class Inventory
 		// wrap up
 		database.close();
 	} // end of method saveInventory(final String fileName...
+
+	public void set(ArrayList<Item> rowData) 
+	{
+		inventoryList = rowData;
+	}
 }

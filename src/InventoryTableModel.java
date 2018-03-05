@@ -26,7 +26,17 @@ public class InventoryTableModel extends AbstractTableModel {
 		rowData.addAll(inventoryList.getInventoryList());
 		fireTableDataChanged();
 	}
+	
+	public void removeRow(int row) 
+	{
+	    rowData.remove(row);
+	}
 
+	public ArrayList<Item> getRowData()
+	{
+		return rowData;
+	}
+	
 	@Override
 	public int getRowCount() 
 	{
