@@ -16,6 +16,7 @@ public class InventoryTableModel extends AbstractTableModel {
 			"Type",
 			"Quantity",
 			"Price",
+			"Information"
 	};
 
 	// instance fields
@@ -29,23 +30,23 @@ public class InventoryTableModel extends AbstractTableModel {
 		rowData = new ArrayList<Item>();
 	} // end of constructor 
 
-	public void refreshTable(Inventory inventoryList) 
+	public void refreshTable(ArrayList<Item> inventoryList) 
 	{
 		rowData.clear();
-		rowData.addAll(inventoryList.getInventoryList());
+		rowData.addAll(inventoryList);
 		fireTableDataChanged();
 	}
-	
+
 	public void removeRow(int row) 
 	{
-	    rowData.remove(row);
+		rowData.remove(row);
 	}
 
 	public ArrayList<Item> getRowData()
 	{
 		return rowData;
 	}
-	
+
 	@Override
 	public int getRowCount() 
 	{
@@ -74,19 +75,39 @@ public class InventoryTableModel extends AbstractTableModel {
 	{
 		Item item = getItemData(rowIndex);
 		Object value = null;
-		switch (columnIndex) {
-		case 0:
-			value = item.getItemName();
-			break;
-		case 1:
-			value = item.getType();
-			break;
-		case 2:
-			value = item.getQuantity();
-			break;
-		case 3:
-	        value = Utility.CURRENCY_FORMAT.format(item.getPrice());
+		switch (columnIndex) 
+		{
+			case 0:
+				value = item.getItemName();
+				break;
+			case 1:
+				value = item.getType();
+				break;
+			case 2:
+				value = item.getQuantity();
+				break;
+			case 3:
+				value = Utility.CURRENCY_FORMAT.format(item.getPrice());
+				break;
+			case 4:
+				if (item.getType().equals("Food"))
+				{
+					value = ((Food) item).getWeight() + "kg";
+				}
+				else if (item.getType().equals("Drink"))
+				{
+					value = ((Drink) item).getVolume() + "ml";
+				}
+				else if (item.getType().equals("Cigarettes"))
+				{
+					value = ((CigaretteBox) item).getSize();
+				}
+				else if (item.getType().equals("Lottery Ticket"))
+				{
+					value = "N/A";
+				}
+					
 		}
-		return value;
+	return value;
 	}
 }

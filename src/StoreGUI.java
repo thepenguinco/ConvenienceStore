@@ -7,11 +7,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableRowSorter;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
 import java.awt.Font;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -57,6 +60,11 @@ public class StoreGUI extends JFrame
 	 */
 	public static final String[] ITEM_TYPES = {"Food", "Drink", "Cigarettes", "Lottery Ticket"};
 	
+	/**
+	 * String array containing all the cigarette box sizes available at this store
+	 */
+	public static final String[] CIGARETTES_TYPES = {"Small", "Medium", "Large"};
+	
 	// protected fields
 
 	/*
@@ -86,22 +94,28 @@ public class StoreGUI extends JFrame
 		JTextField quantity = new JTextField();
 		JLabel priceLabel = new JLabel("Price:");
 		JTextField price = new JTextField();
-		JLabel weightLabel = new JLabel("Weight:");
+		JLabel weightLabel = new JLabel("Weight (kg):");
 		JTextField weight = new JTextField();
-		JLabel volumeLabel = new JLabel("Volume:");
+		JLabel volumeLabel = new JLabel("Volume (ml):");
 		JTextField volume = new JTextField();
+		JLabel sizeLabel = new JLabel("Size:");
+		JComboBox size = new JComboBox(CIGARETTES_TYPES);
 		Object[] message = {
 				categoryLabel, category,
 				nameLabel, name,
 				quantityLabel, quantity,
 				priceLabel, price,
 				weightLabel, weight,
-				volumeLabel, volume
+				volumeLabel, volume,
+				sizeLabel, size				
 		};
-		category.addItemListener(new ItemListener() {
+		category.addItemListener(new ItemListener() 
+		{
 		    @Override
-		    public void itemStateChanged(ItemEvent e) {
-		        if(e.getStateChange() == ItemEvent.SELECTED) {
+		    public void itemStateChanged(ItemEvent e) 
+		    {
+		        if(e.getStateChange() == ItemEvent.SELECTED) 
+		        {
 		            String selection = (String) category.getSelectedItem();
 		            // FOOD
 		            if (selection == ITEM_TYPES[0])
@@ -110,6 +124,8 @@ public class StoreGUI extends JFrame
 		        		weight.setVisible(true);
 		        		volumeLabel.setVisible(false);
 		        		volume.setVisible(false);
+		        		sizeLabel.setVisible(false);
+		        		size.setVisible(false);
 		            }
 		            // DRINK
 		            else if (selection == ITEM_TYPES[1])
@@ -118,23 +134,38 @@ public class StoreGUI extends JFrame
 		        		weight.setVisible(false);
 		        		volumeLabel.setVisible(true);
 		        		volume.setVisible(true);
+		        		sizeLabel.setVisible(false);
+		        		size.setVisible(false);
 		            }
 		            // CIGARETTES
 		            else if (selection == ITEM_TYPES[2])
 		            {
-		            	//TODO
+		            	weightLabel.setVisible(false);
+		        		weight.setVisible(false);
+		        		volumeLabel.setVisible(false);
+		        		volume.setVisible(false);
+		        		sizeLabel.setVisible(true);
+		        		size.setVisible(true);
 		            }
+		            // LOTTERY TICKETS
 		            else if (selection == ITEM_TYPES[3])
 		            {
-		            	// TODO
+		            	weightLabel.setVisible(false);
+		        		weight.setVisible(false);
+		        		volumeLabel.setVisible(false);
+		        		volume.setVisible(false);
+		        		sizeLabel.setVisible(false);
+		        		size.setVisible(false);
 		            }
 		        }
 		    }
 		});
+		category.setSelectedItem(ITEM_TYPES[0]);
 		while (true)
 		{
-			
+			UIManager.put("OptionPane.minimumSize",new Dimension(300, 300));
 			int option = JOptionPane.showConfirmDialog(frame, message, "Add an item", JOptionPane.OK_CANCEL_OPTION);
+			UIManager.put("OptionPane.minimumSize",new Dimension(120, 120));
 			if (option == JOptionPane.OK_OPTION) 
 			{
 				try
@@ -155,33 +186,48 @@ public class StoreGUI extends JFrame
 					{
 						JOptionPane.showMessageDialog(frame, "You must enter a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
+					else if ((weight.getText().isEmpty() || Double.parseDouble(weight.getText()) <= 0) && weight.isVisible())
+					{
+						JOptionPane.showMessageDialog(frame, "You must enter a valid weight.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if ((volume.getText().isEmpty() || Double.parseDouble(volume.getText()) <= 0) && volume.isVisible())
+					{
+						JOptionPane.showMessageDialog(frame, "You must enter a valid volume.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if (size.getSelectedItem() == null && size.isVisible())
+					{
+						JOptionPane.showMessageDialog(frame, "You must enter a valid size.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 					else
 					{
 						Item item;
 						String selection = (String) category.getSelectedItem();
+						// Food
 						if (selection.equals(ITEM_TYPES[0]))
 						{
-							System.out.println("hello");
+							item = new Food(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), Double.parseDouble(weight.getText()));
 						}
+						// Drink
 						else if (selection.equals(ITEM_TYPES[1]))
 						{
-							System.out.println("hello");
+							item = new Drink(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), Double.parseDouble(volume.getText()));
 						}
+						// Cigarettes
 						else if (selection.equals(ITEM_TYPES[2]))
 						{
-							System.out.println("hello");
+							item = new CigaretteBox(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), (String) size.getSelectedItem());
 						}
+						// 
 						else if (selection.equals(ITEM_TYPES[3]))
 						{
-							System.out.println("hello");
+							item = new LotteryTicket(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()));
 						}
 						else
 						{
-							System.out.println("Error!");
+							item = null;
 						}
-						//Item item = new Item(name.getText(), , Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()));
 						inventoryList.addItem(item);
-						model.refreshTable(inventoryList);
+						model.refreshTable(inventoryList.getInventoryList());
 						break;
 					}
 				}
@@ -201,18 +247,87 @@ public class StoreGUI extends JFrame
 	 * Dialog box for editing items in the inventory management system
 	 */
 	private void editItemDialogBox(Item item) {
+		JLabel categoryLabel = new JLabel("Category: ");
+		JComboBox category = new JComboBox(ITEM_TYPES);
+		category.setSelectedItem(null);
+		JLabel nameLabel = new JLabel("Name:");
 		JTextField name = new JTextField(item.getItemName());
+		JLabel quantityLabel = new JLabel("Quantity:");
 		JTextField quantity = new JTextField(Integer.toString(item.getQuantity()));
+		JLabel priceLabel = new JLabel("Price:");
 		JTextField price = new JTextField(Double.toString(item.getPrice()));
+		JLabel weightLabel = new JLabel("Weight (kg):");
+		JTextField weight = new JTextField(Double.toString(1));
+		JLabel volumeLabel = new JLabel("Volume (ml):");
+		JTextField volume = new JTextField(Double.toString(1));
+		JLabel sizeLabel = new JLabel("Size:");
+		JComboBox size = new JComboBox(CIGARETTES_TYPES);
 		Object[] message = {
-				"Name:", name,
-				"Type:", type,
-				"Quantity:", quantity,
-				"Price:", price
+				categoryLabel, category,
+				nameLabel, name,
+				quantityLabel, quantity,
+				priceLabel, price,
+				weightLabel, weight,
+				volumeLabel, volume,
+				sizeLabel, size				
 		};
+		category.addItemListener(new ItemListener() 
+		{
+		    @Override
+		    public void itemStateChanged(ItemEvent e) 
+		    {
+		        if(e.getStateChange() == ItemEvent.SELECTED) 
+		        {
+		            String selection = (String) category.getSelectedItem();
+		            // FOOD
+		            if (selection == ITEM_TYPES[0])
+		            {
+		            	weightLabel.setVisible(true);
+		        		weight.setVisible(true);
+		        		volumeLabel.setVisible(false);
+		        		volume.setVisible(false);
+		        		sizeLabel.setVisible(false);
+		        		size.setVisible(false);
+		            }
+		            // DRINK
+		            else if (selection == ITEM_TYPES[1])
+		            {
+		            	weightLabel.setVisible(false);
+		        		weight.setVisible(false);
+		        		volumeLabel.setVisible(true);
+		        		volume.setVisible(true);
+		        		sizeLabel.setVisible(false);
+		        		size.setVisible(false);
+		            }
+		            // CIGARETTES
+		            else if (selection == ITEM_TYPES[2])
+		            {
+		            	weightLabel.setVisible(false);
+		        		weight.setVisible(false);
+		        		volumeLabel.setVisible(false);
+		        		volume.setVisible(false);
+		        		sizeLabel.setVisible(true);
+		        		size.setVisible(true);
+		            }
+		            // LOTTERY TICKETS
+		            else if (selection == ITEM_TYPES[3])
+		            {
+		            	weightLabel.setVisible(false);
+		        		weight.setVisible(false);
+		        		volumeLabel.setVisible(false);
+		        		volume.setVisible(false);
+		        		sizeLabel.setVisible(false);
+		        		size.setVisible(false);
+		            }
+		        }
+		    }
+		});
+		category.setSelectedItem(item.getType());
 		while (true)
-		{	
-			int option = JOptionPane.showConfirmDialog(frame, message, "Edit an item", JOptionPane.OK_CANCEL_OPTION);
+		{
+			UIManager.put("OptionPane.minimumSize",new Dimension(300, 300));
+			int option = JOptionPane.showConfirmDialog(frame, message, "Add an item", JOptionPane.OK_CANCEL_OPTION);
+			UIManager.put("OptionPane.minimumSize",new Dimension(120, 120));
 			if (option == JOptionPane.OK_OPTION) 
 			{
 				try
@@ -220,11 +335,10 @@ public class StoreGUI extends JFrame
 					if (name.getText().isEmpty())
 					{
 						JOptionPane.showMessageDialog(frame, "You cannot leave the name empty.", "Error", JOptionPane.ERROR_MESSAGE);
-					} 
-					// USE INHERITANCE
-					else if (type.getText().isEmpty())
+					}
+					else if (category.getSelectedItem() == null)
 					{
-						JOptionPane.showMessageDialog(frame, "You cannot leave the type empty.", "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(frame, "You cannot leave the category empty.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 					else if (quantity.getText().isEmpty() || Integer.parseInt(quantity.getText()) <= 0)
 					{
@@ -234,13 +348,46 @@ public class StoreGUI extends JFrame
 					{
 						JOptionPane.showMessageDialog(frame, "You must enter a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
+					else if ((weight.getText().isEmpty() || Double.parseDouble(weight.getText()) <= 0) && weight.isVisible())
+					{
+						JOptionPane.showMessageDialog(frame, "You must enter a valid weight.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if ((volume.getText().isEmpty() || Double.parseDouble(volume.getText()) <= 0) && volume.isVisible())
+					{
+						JOptionPane.showMessageDialog(frame, "You must enter a valid volume.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else if (size.getSelectedItem() == null && size.isVisible())
+					{
+						JOptionPane.showMessageDialog(frame, "You must enter a valid size.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 					else
 					{
-						item.setName(name.getText());
-						item.setType(type.getText());
-						item.setQuantity(Integer.parseInt(quantity.getText()));
-						item.setPrice(Double.parseDouble(price.getText()));
-						model.refreshTable(inventoryList);
+						String selection = (String) category.getSelectedItem();
+						// Food
+						if (selection.equals(ITEM_TYPES[0]))
+						{
+							item = new Food(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), Double.parseDouble(weight.getText()));
+						}
+						// Drink
+						else if (selection.equals(ITEM_TYPES[1]))
+						{
+							item = new Drink(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), Double.parseDouble(volume.getText()));
+						}
+						// Cigarettes
+						else if (selection.equals(ITEM_TYPES[2]))
+						{
+							item = new CigaretteBox(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), (String) size.getSelectedItem());
+						}
+						// 
+						else if (selection.equals(ITEM_TYPES[3]))
+						{
+							item = new LotteryTicket(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()));
+						}
+						else
+						{
+							item = null;
+						}
+						model.refreshTable(inventoryList.getInventoryList());
 						break;
 					}
 				}
@@ -249,19 +396,35 @@ public class StoreGUI extends JFrame
 					JOptionPane.showMessageDialog(frame, "You must enter a valid integer quantity and a valid price.", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			else if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) 
+			if (option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) 
 			{
 				break;
 			}
 		}
 	}
+
 	
 	/*
 	 * 
 	 */
 	private void search(String text)
 	{
-		// TODO
+		if (text == "")
+		{
+			model.refreshTable(inventoryList.getInventoryList());	
+		}
+		else
+		{
+			ArrayList<Item>searchList = new ArrayList<Item>();
+			for (Item item : inventoryList.getInventoryList())
+			{
+				if (item.getItemName().contains(text) || item.getType().contains(text))
+				{
+					searchList.add(item);
+				}
+			}
+			model.refreshTable(searchList);
+		}
 	}
 
 	/**
@@ -316,6 +479,7 @@ public class StoreGUI extends JFrame
 		table = new JTable(model);
 		sorter = new TableRowSorter<InventoryTableModel>(model);
 		table.setRowSorter(sorter);
+		sorter.setSortable(4, false); 
 		scrollPane.setViewportView(table);
 
 		searchCriteria = new JTextField();
@@ -370,7 +534,7 @@ public class StoreGUI extends JFrame
 					try 
 					{
 						inventoryList = new Inventory(loadFile.getSelectedFile().toString());
-						model.refreshTable(inventoryList);
+						model.refreshTable(inventoryList.getInventoryList());
 					}
 					catch (IOException exception) 
 					{
@@ -465,7 +629,7 @@ public class StoreGUI extends JFrame
 				{
 					model.removeRow(table.getSelectedRow());
 					inventoryList.set(model.getRowData());
-					model.refreshTable(inventoryList);
+					model.refreshTable(inventoryList.getInventoryList());
 				}
 				catch (ArrayIndexOutOfBoundsException exception)
 				{
