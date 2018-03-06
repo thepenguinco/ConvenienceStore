@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
- * A transaction performed at the convenience store.
+ * A receipt for purchases at the convenience store.
  * 
  * @author Eric Li
  * @version 1.0 2018-01-10
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 public class Receipt
 {
 	// class fields
-
-
 
 	/**
 	 * The valid number of tokens per line for 
@@ -92,9 +90,10 @@ public class Receipt
 	 * 
 	 * @return inventoryList the inventory list
 	 */
-	public ArrayList<Item> getInventoryList()
+	public String getDate()
 	{
-		return purchasedItems;
+		
+		return s;
 	} // end of method getInventoryList()
 
 	/**

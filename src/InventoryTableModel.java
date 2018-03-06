@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * An inventory table model that displays data from the inventory list in a JTable
+ * 
+ * @author Eric Li
+ * @version 1.0 2018-03-02
+ */
 public class InventoryTableModel extends AbstractTableModel {
 
 	// class fields
@@ -15,10 +21,13 @@ public class InventoryTableModel extends AbstractTableModel {
 	// instance fields
 	private ArrayList<Item> rowData;
 
+	/**
+	 * Constructs an empty inventory table model.
+	 */
 	public InventoryTableModel() 
 	{
 		rowData = new ArrayList<Item>();
-	}
+	} // end of constructor 
 
 	public void refreshTable(Inventory inventoryList) 
 	{

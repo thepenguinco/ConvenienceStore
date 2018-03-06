@@ -28,10 +28,13 @@ import javax.swing.JMenu;
 import javax.swing.JTextField;
 import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -49,6 +52,11 @@ public class StoreGUI extends JFrame
 {
 	// class fields
 
+	/**
+	 * String array containing all the item types available at this store
+	 */
+	public static final String[] ITEM_TYPES = {"Food", "Drink", "Cigarettes", "Lottery Ticket"};
+	
 	// protected fields
 
 	/*
@@ -58,7 +66,7 @@ public class StoreGUI extends JFrame
 
 	// instance fields
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField searchCriteria;
 	private JTable table;
 	private Inventory inventoryList;
 	private InventoryTableModel model;
@@ -69,18 +77,63 @@ public class StoreGUI extends JFrame
 	 * Dialog box for adding items to the inventory management system
 	 */
 	private void addItemDialogBox() {
+		JLabel categoryLabel = new JLabel("Category: ");
+		JComboBox category = new JComboBox(ITEM_TYPES);
+		category.setSelectedItem(null);
+		JLabel nameLabel = new JLabel("Name:");
 		JTextField name = new JTextField();
-		JTextField type = new JTextField();
+		JLabel quantityLabel = new JLabel("Quantity:");
 		JTextField quantity = new JTextField();
+		JLabel priceLabel = new JLabel("Price:");
 		JTextField price = new JTextField();
+		JLabel weightLabel = new JLabel("Weight:");
+		JTextField weight = new JTextField();
+		JLabel volumeLabel = new JLabel("Volume:");
+		JTextField volume = new JTextField();
 		Object[] message = {
-				"Name:", name,
-				"Type:", type,
-				"Quantity:", quantity,
-				"Price:", price
+				categoryLabel, category,
+				nameLabel, name,
+				quantityLabel, quantity,
+				priceLabel, price,
+				weightLabel, weight,
+				volumeLabel, volume
 		};
+		category.addItemListener(new ItemListener() {
+		    @Override
+		    public void itemStateChanged(ItemEvent e) {
+		        if(e.getStateChange() == ItemEvent.SELECTED) {
+		            String selection = (String) category.getSelectedItem();
+		            // FOOD
+		            if (selection == ITEM_TYPES[0])
+		            {
+		            	weightLabel.setVisible(true);
+		        		weight.setVisible(true);
+		        		volumeLabel.setVisible(false);
+		        		volume.setVisible(false);
+		            }
+		            // DRINK
+		            else if (selection == ITEM_TYPES[1])
+		            {
+		            	weightLabel.setVisible(false);
+		        		weight.setVisible(false);
+		        		volumeLabel.setVisible(true);
+		        		volume.setVisible(true);
+		            }
+		            // CIGARETTES
+		            else if (selection == ITEM_TYPES[2])
+		            {
+		            	//TODO
+		            }
+		            else if (selection == ITEM_TYPES[3])
+		            {
+		            	// TODO
+		            }
+		        }
+		    }
+		});
 		while (true)
-		{	
+		{
+			
 			int option = JOptionPane.showConfirmDialog(frame, message, "Add an item", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) 
 			{
@@ -89,11 +142,10 @@ public class StoreGUI extends JFrame
 					if (name.getText().isEmpty())
 					{
 						JOptionPane.showMessageDialog(frame, "You cannot leave the name empty.", "Error", JOptionPane.ERROR_MESSAGE);
-					} 
-					// dropdown is better
-					else if (type.getText().isEmpty())
+					}
+					else if (category.getSelectedItem() == null)
 					{
-						JOptionPane.showMessageDialog(frame, "You cannot leave the type empty.", "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(frame, "You cannot leave the category empty.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 					else if (quantity.getText().isEmpty() || Integer.parseInt(quantity.getText()) <= 0)
 					{
@@ -105,7 +157,29 @@ public class StoreGUI extends JFrame
 					}
 					else
 					{
-						Item item = new Item(name.getText(), type.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()));
+						Item item;
+						String selection = (String) category.getSelectedItem();
+						if (selection.equals(ITEM_TYPES[0]))
+						{
+							System.out.println("hello");
+						}
+						else if (selection.equals(ITEM_TYPES[1]))
+						{
+							System.out.println("hello");
+						}
+						else if (selection.equals(ITEM_TYPES[2]))
+						{
+							System.out.println("hello");
+						}
+						else if (selection.equals(ITEM_TYPES[3]))
+						{
+							System.out.println("hello");
+						}
+						else
+						{
+							System.out.println("Error!");
+						}
+						//Item item = new Item(name.getText(), , Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()));
 						inventoryList.addItem(item);
 						model.refreshTable(inventoryList);
 						break;
@@ -128,7 +202,6 @@ public class StoreGUI extends JFrame
 	 */
 	private void editItemDialogBox(Item item) {
 		JTextField name = new JTextField(item.getItemName());
-		JTextField type = new JTextField(item.getType());
 		JTextField quantity = new JTextField(Integer.toString(item.getQuantity()));
 		JTextField price = new JTextField(Double.toString(item.getPrice()));
 		Object[] message = {
@@ -181,6 +254,14 @@ public class StoreGUI extends JFrame
 				break;
 			}
 		}
+	}
+	
+	/*
+	 * 
+	 */
+	private void search(String text)
+	{
+		// TODO
 	}
 
 	/**
@@ -237,15 +318,15 @@ public class StoreGUI extends JFrame
 		table.setRowSorter(sorter);
 		scrollPane.setViewportView(table);
 
-		textField = new JTextField();
-		textField.setBounds(515, 44, 100, 20);
-		inventoryPanel.add(textField);
-		textField.setColumns(10);
+		searchCriteria = new JTextField();
+		searchCriteria.setBounds(515, 44, 100, 20);
+		inventoryPanel.add(searchCriteria);
+		searchCriteria.setColumns(10);
 
-		JLabel lblSearchCriteria = new JLabel("Search Criteria");
-		lblSearchCriteria.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSearchCriteria.setBounds(515, 25, 100, 15);
-		inventoryPanel.add(lblSearchCriteria);
+		JLabel searchCriteriaLabel = new JLabel("Search Criteria");
+		searchCriteriaLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		searchCriteriaLabel.setBounds(515, 25, 100, 15);
+		inventoryPanel.add(searchCriteriaLabel);
 
 		JButton searchButton = new JButton("Search");
 		searchButton.setBounds(515, 78, 99, 25);
@@ -255,10 +336,11 @@ public class StoreGUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				long b = System.currentTimeMillis();
+				/*long b = System.currentTimeMillis();
 				String s = String.valueOf(b);
 				Date t = new Date(b);
-				JOptionPane.showMessageDialog(frame, t, s, JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(frame, t, s, JOptionPane.WARNING_MESSAGE);*/
+				search(searchCriteria.getText());
 			}
 		});
 
@@ -381,7 +463,6 @@ public class StoreGUI extends JFrame
 			{
 				try
 				{
-					// PROMPT DIALOG BOX TODO
 					model.removeRow(table.getSelectedRow());
 					inventoryList.set(model.getRowData());
 					model.refreshTable(inventoryList);
