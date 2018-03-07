@@ -20,11 +20,19 @@ public class Drink extends Item
 	}
 
 	@Override
-	public String getType() {
+	public int getID() 
+	{
+		return Inventory.DRINK_ID;
+	}
+	
+	@Override
+	public String getType() 
+	{
 		return "Drink";
 	}
 	
-	public double getVolume() {
+	public double getVolume() 
+	{
 		return volume;
 	}
 	

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class Receipt
 {
 	// class fields
+	
+	
 
 	/**
 	 * The valid number of tokens per line for 

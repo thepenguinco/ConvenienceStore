@@ -1,3 +1,4 @@
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
@@ -11,7 +12,9 @@ public class InventoryTableModel extends AbstractTableModel {
 
 	// class fields
 
-	public static final String[] COLUMN_NAMES = {
+	public final static NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
+
+	public final static String[] COLUMN_NAMES = {
 			"Name",
 			"Type",
 			"Quantity",
@@ -40,6 +43,11 @@ public class InventoryTableModel extends AbstractTableModel {
 	public void removeRow(int row) 
 	{
 		rowData.remove(row);
+	}
+
+	public void setRow(int row, Item item)
+	{
+		rowData.set(row, item);
 	}
 
 	public ArrayList<Item> getRowData()
@@ -77,37 +85,37 @@ public class InventoryTableModel extends AbstractTableModel {
 		Object value = null;
 		switch (columnIndex) 
 		{
-			case 0:
-				value = item.getItemName();
-				break;
-			case 1:
-				value = item.getType();
-				break;
-			case 2:
-				value = item.getQuantity();
-				break;
-			case 3:
-				value = Utility.CURRENCY_FORMAT.format(item.getPrice());
-				break;
-			case 4:
-				if (item.getType().equals("Food"))
-				{
-					value = ((Food) item).getWeight() + "kg";
-				}
-				else if (item.getType().equals("Drink"))
-				{
-					value = ((Drink) item).getVolume() + "ml";
-				}
-				else if (item.getType().equals("Cigarettes"))
-				{
-					value = ((CigaretteBox) item).getSize();
-				}
-				else if (item.getType().equals("Lottery Ticket"))
-				{
-					value = "N/A";
-				}
-					
+		case 0:
+			value = item.getItemName();
+			break;
+		case 1:
+			value = item.getType();
+			break;
+		case 2:
+			value = item.getQuantity();
+			break;
+		case 3:
+			value = CURRENCY_FORMAT.format(item.getPrice());
+			break;
+		case 4:
+			if (item.getType().equals("Food"))
+			{
+				value = ((Food) item).getWeight() + "kg";
+			}
+			else if (item.getType().equals("Drink"))
+			{
+				value = ((Drink) item).getVolume() + "ml";
+			}
+			else if (item.getType().equals("Cigarettes"))
+			{
+				value = ((CigaretteBox) item).getSize();
+			}
+			//else if (item.getType().equals("Lottery Ticket"))
+			else
+			{
+				value = "";
+			}
 		}
-	return value;
+		return value;
 	}
 }

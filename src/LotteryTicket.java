@@ -15,7 +15,13 @@ public class LotteryTicket extends Item
 	{
 		super(name, quantity, price);
 	}
-
+	
+	@Override
+	public int getID() 
+	{
+		return Inventory.LOTTERY_TICKET_ID;
+	}
+	
 	@Override
 	public String getType() {
 		return "Lottery Ticket";

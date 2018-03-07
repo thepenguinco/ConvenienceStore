@@ -41,6 +41,7 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
@@ -59,12 +60,12 @@ public class StoreGUI extends JFrame
 	 * String array containing all the item types available at this store
 	 */
 	public static final String[] ITEM_TYPES = {"Food", "Drink", "Cigarettes", "Lottery Ticket"};
-	
+
 	/**
 	 * String array containing all the cigarette box sizes available at this store
 	 */
 	public static final String[] CIGARETTES_TYPES = {"Small", "Medium", "Large"};
-	
+
 	// protected fields
 
 	/*
@@ -111,54 +112,54 @@ public class StoreGUI extends JFrame
 		};
 		category.addItemListener(new ItemListener() 
 		{
-		    @Override
-		    public void itemStateChanged(ItemEvent e) 
-		    {
-		        if(e.getStateChange() == ItemEvent.SELECTED) 
-		        {
-		            String selection = (String) category.getSelectedItem();
-		            // FOOD
-		            if (selection == ITEM_TYPES[0])
-		            {
-		            	weightLabel.setVisible(true);
-		        		weight.setVisible(true);
-		        		volumeLabel.setVisible(false);
-		        		volume.setVisible(false);
-		        		sizeLabel.setVisible(false);
-		        		size.setVisible(false);
-		            }
-		            // DRINK
-		            else if (selection == ITEM_TYPES[1])
-		            {
-		            	weightLabel.setVisible(false);
-		        		weight.setVisible(false);
-		        		volumeLabel.setVisible(true);
-		        		volume.setVisible(true);
-		        		sizeLabel.setVisible(false);
-		        		size.setVisible(false);
-		            }
-		            // CIGARETTES
-		            else if (selection == ITEM_TYPES[2])
-		            {
-		            	weightLabel.setVisible(false);
-		        		weight.setVisible(false);
-		        		volumeLabel.setVisible(false);
-		        		volume.setVisible(false);
-		        		sizeLabel.setVisible(true);
-		        		size.setVisible(true);
-		            }
-		            // LOTTERY TICKETS
-		            else if (selection == ITEM_TYPES[3])
-		            {
-		            	weightLabel.setVisible(false);
-		        		weight.setVisible(false);
-		        		volumeLabel.setVisible(false);
-		        		volume.setVisible(false);
-		        		sizeLabel.setVisible(false);
-		        		size.setVisible(false);
-		            }
-		        }
-		    }
+			@Override
+			public void itemStateChanged(ItemEvent e) 
+			{
+				if(e.getStateChange() == ItemEvent.SELECTED) 
+				{
+					String selection = (String) category.getSelectedItem();
+					// FOOD
+					if (selection.equals(ITEM_TYPES[0]))
+					{
+						weightLabel.setVisible(true);
+						weight.setVisible(true);
+						volumeLabel.setVisible(false);
+						volume.setVisible(false);
+						sizeLabel.setVisible(false);
+						size.setVisible(false);
+					}
+					// DRINK
+					else if (selection.equals(ITEM_TYPES[1]))
+					{
+						weightLabel.setVisible(false);
+						weight.setVisible(false);
+						volumeLabel.setVisible(true);
+						volume.setVisible(true);
+						sizeLabel.setVisible(false);
+						size.setVisible(false);
+					}
+					// CIGARETTES
+					else if (selection.equals(ITEM_TYPES[2]))
+					{
+						weightLabel.setVisible(false);
+						weight.setVisible(false);
+						volumeLabel.setVisible(false);
+						volume.setVisible(false);
+						sizeLabel.setVisible(true);
+						size.setVisible(true);
+					}
+					// LOTTERY TICKETS
+					else if (selection.equals(ITEM_TYPES[3]))
+					{
+						weightLabel.setVisible(false);
+						weight.setVisible(false);
+						volumeLabel.setVisible(false);
+						volume.setVisible(false);
+						sizeLabel.setVisible(false);
+						size.setVisible(false);
+					}
+				}
+			}
 		});
 		category.setSelectedItem(ITEM_TYPES[0]);
 		while (true)
@@ -228,6 +229,7 @@ public class StoreGUI extends JFrame
 						}
 						inventoryList.addItem(item);
 						model.refreshTable(inventoryList.getInventoryList());
+						JOptionPane.showMessageDialog(frame, "Item Added Successfully.", "Item Added", JOptionPane.INFORMATION_MESSAGE);
 						break;
 					}
 				}
@@ -241,25 +243,24 @@ public class StoreGUI extends JFrame
 				break;
 			}
 		}
-	}
+	} // end of method addItemDialogBox()
 
 	/*
 	 * Dialog box for editing items in the inventory management system
 	 */
-	private void editItemDialogBox(Item item) {
+	private void editItemDialogBox(int row) {
 		JLabel categoryLabel = new JLabel("Category: ");
 		JComboBox category = new JComboBox(ITEM_TYPES);
-		category.setSelectedItem(null);
 		JLabel nameLabel = new JLabel("Name:");
-		JTextField name = new JTextField(item.getItemName());
+		JTextField name = new JTextField();
 		JLabel quantityLabel = new JLabel("Quantity:");
-		JTextField quantity = new JTextField(Integer.toString(item.getQuantity()));
+		JTextField quantity = new JTextField();
 		JLabel priceLabel = new JLabel("Price:");
-		JTextField price = new JTextField(Double.toString(item.getPrice()));
+		JTextField price = new JTextField();
 		JLabel weightLabel = new JLabel("Weight (kg):");
-		JTextField weight = new JTextField(Double.toString(1));
+		JTextField weight = new JTextField();
 		JLabel volumeLabel = new JLabel("Volume (ml):");
-		JTextField volume = new JTextField(Double.toString(1));
+		JTextField volume = new JTextField();
 		JLabel sizeLabel = new JLabel("Size:");
 		JComboBox size = new JComboBox(CIGARETTES_TYPES);
 		Object[] message = {
@@ -271,62 +272,110 @@ public class StoreGUI extends JFrame
 				volumeLabel, volume,
 				sizeLabel, size				
 		};
+		Item item = model.getItemData(row);
+		int typeId = item.getID();
+		name.setText(item.getItemName());
+		quantity.setText(Integer.toString(item.getQuantity()));
+		price.setText(Double.toString(item.getPrice()));
+		category.setSelectedItem(item.getType());
+		if (typeId == Inventory.FOOD_ID)
+		{
+			weightLabel.setVisible(true);
+			weight.setVisible(true);
+			weight.setText(Double.toString(((Food) item).getWeight()));
+			volumeLabel.setVisible(false);
+			volume.setVisible(false);
+			sizeLabel.setVisible(false);
+			size.setVisible(false);
+		}
+		// DRINK
+		else if (typeId == Inventory.DRINK_ID)
+		{
+			weightLabel.setVisible(false);
+			weight.setVisible(false);
+			volumeLabel.setVisible(true);
+			volume.setVisible(true);
+			volume.setText(Double.toString(((Drink) item).getVolume()));
+			sizeLabel.setVisible(false);
+			size.setVisible(false);
+		}
+		// CIGARETTES
+		else if (typeId == Inventory.CIGARETTE_BOX_ID)
+		{
+			weightLabel.setVisible(false);
+			weight.setVisible(false);
+			volumeLabel.setVisible(false);
+			volume.setVisible(false);
+			sizeLabel.setVisible(true);
+			size.setVisible(true);
+			size.setSelectedItem(((CigaretteBox) item).getSize());
+		}
+		// LOTTERY TICKETS
+		else if (typeId == Inventory.LOTTERY_TICKET_ID)
+		{
+			weightLabel.setVisible(false);
+			weight.setVisible(false);
+			volumeLabel.setVisible(false);
+			volume.setVisible(false);
+			sizeLabel.setVisible(false);
+			size.setVisible(false);
+		}
+
 		category.addItemListener(new ItemListener() 
 		{
-		    @Override
-		    public void itemStateChanged(ItemEvent e) 
-		    {
-		        if(e.getStateChange() == ItemEvent.SELECTED) 
-		        {
-		            String selection = (String) category.getSelectedItem();
-		            // FOOD
-		            if (selection == ITEM_TYPES[0])
-		            {
-		            	weightLabel.setVisible(true);
-		        		weight.setVisible(true);
-		        		volumeLabel.setVisible(false);
-		        		volume.setVisible(false);
-		        		sizeLabel.setVisible(false);
-		        		size.setVisible(false);
-		            }
-		            // DRINK
-		            else if (selection == ITEM_TYPES[1])
-		            {
-		            	weightLabel.setVisible(false);
-		        		weight.setVisible(false);
-		        		volumeLabel.setVisible(true);
-		        		volume.setVisible(true);
-		        		sizeLabel.setVisible(false);
-		        		size.setVisible(false);
-		            }
-		            // CIGARETTES
-		            else if (selection == ITEM_TYPES[2])
-		            {
-		            	weightLabel.setVisible(false);
-		        		weight.setVisible(false);
-		        		volumeLabel.setVisible(false);
-		        		volume.setVisible(false);
-		        		sizeLabel.setVisible(true);
-		        		size.setVisible(true);
-		            }
-		            // LOTTERY TICKETS
-		            else if (selection == ITEM_TYPES[3])
-		            {
-		            	weightLabel.setVisible(false);
-		        		weight.setVisible(false);
-		        		volumeLabel.setVisible(false);
-		        		volume.setVisible(false);
-		        		sizeLabel.setVisible(false);
-		        		size.setVisible(false);
-		            }
-		        }
-		    }
+			@Override
+			public void itemStateChanged(ItemEvent e) 
+			{
+				if(e.getStateChange() == ItemEvent.SELECTED) 
+				{
+					String selection = (String) category.getSelectedItem();
+					// FOOD
+					if (selection.equals(ITEM_TYPES[0]))
+					{
+						weightLabel.setVisible(true);
+						weight.setVisible(true);
+						volumeLabel.setVisible(false);
+						volume.setVisible(false);
+						sizeLabel.setVisible(false);
+						size.setVisible(false);
+					}
+					// DRINK
+					else if (selection.equals(ITEM_TYPES[1]))
+					{
+						weightLabel.setVisible(false);
+						weight.setVisible(false);
+						volumeLabel.setVisible(true);
+						volume.setVisible(true);
+						sizeLabel.setVisible(false);
+						size.setVisible(false);
+					}
+					// CIGARETTES
+					else if (selection.equals(ITEM_TYPES[2]))
+					{
+						weightLabel.setVisible(false);
+						weight.setVisible(false);
+						volumeLabel.setVisible(false);
+						volume.setVisible(false);
+						sizeLabel.setVisible(true);
+						size.setVisible(true);
+					}
+					// LOTTERY TICKETS
+					else if (selection.equals(ITEM_TYPES[3]))
+					{
+						weightLabel.setVisible(false);
+						weight.setVisible(false);
+						volumeLabel.setVisible(false);
+						volume.setVisible(false);
+						sizeLabel.setVisible(false);
+						size.setVisible(false);
+					}
+				}
+			}
 		});
-		category.setSelectedItem(item.getType());
 		while (true)
 		{
 			UIManager.put("OptionPane.minimumSize",new Dimension(300, 300));
-			int option = JOptionPane.showConfirmDialog(frame, message, "Add an item", JOptionPane.OK_CANCEL_OPTION);
+			int option = JOptionPane.showConfirmDialog(frame, message, "Edit an item", JOptionPane.OK_CANCEL_OPTION);
 			UIManager.put("OptionPane.minimumSize",new Dimension(120, 120));
 			if (option == JOptionPane.OK_OPTION) 
 			{
@@ -378,7 +427,7 @@ public class StoreGUI extends JFrame
 						{
 							item = new CigaretteBox(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()), (String) size.getSelectedItem());
 						}
-						// 
+						// Lottery Tickets
 						else if (selection.equals(ITEM_TYPES[3]))
 						{
 							item = new LotteryTicket(name.getText(), Integer.parseInt(quantity.getText()), Double.parseDouble(price.getText()));
@@ -387,7 +436,11 @@ public class StoreGUI extends JFrame
 						{
 							item = null;
 						}
+						inventoryList.addItem(item);
+						model.setRow(row, item);
+						inventoryList.set(model.getRowData());
 						model.refreshTable(inventoryList.getInventoryList());
+						JOptionPane.showMessageDialog(frame, "Item Edited Successfully.", "Item Edited", JOptionPane.INFORMATION_MESSAGE);
 						break;
 					}
 				}
@@ -401,15 +454,14 @@ public class StoreGUI extends JFrame
 				break;
 			}
 		}
-	}
+	} // end of method editItemDialogBox
 
-	
 	/*
-	 * 
+	 * Item search method used by the GUI
 	 */
 	private void search(String text)
 	{
-		if (text == "")
+		if (text.isEmpty())
 		{
 			model.refreshTable(inventoryList.getInventoryList());	
 		}
@@ -418,7 +470,8 @@ public class StoreGUI extends JFrame
 			ArrayList<Item>searchList = new ArrayList<Item>();
 			for (Item item : inventoryList.getInventoryList())
 			{
-				if (item.getItemName().contains(text) || item.getType().contains(text))
+				if (item.getItemName().toLowerCase().contains(text.toLowerCase()) || item.getType().toLowerCase().contains(text.toLowerCase())
+						|| Integer.toString(item.getQuantity()).contains(text) || Double.toString(item.getPrice()).contains(text))
 				{
 					searchList.add(item);
 				}
@@ -426,6 +479,35 @@ public class StoreGUI extends JFrame
 			model.refreshTable(searchList);
 		}
 	}
+
+	Comparator alphaComparator = new Comparator<String>()
+	{
+		@Override
+		public int compare(String string1, String string2)
+		{
+			return string1.compareTo(string2);
+		}        
+	};
+
+	Comparator doubleComparator = new Comparator<Double>()
+	{
+		@Override
+		public int compare(Double number1, Double number2) {
+			if (number1 < number2) return -1;
+			if (number2 > number1) return 1;
+			return 0;
+		}        
+	};
+
+	Comparator integerComparator = new Comparator<Integer>()
+	{
+		@Override
+		public int compare(Integer number1, Integer number2) {
+			if (number1 < number2) return -1;
+			if (number2 > number1) return 1;
+			return 0;
+		}        
+	};
 
 	/**
 	 * Launch the main application.
@@ -479,7 +561,11 @@ public class StoreGUI extends JFrame
 		table = new JTable(model);
 		sorter = new TableRowSorter<InventoryTableModel>(model);
 		table.setRowSorter(sorter);
-		sorter.setSortable(4, false); 
+		sorter.setSortable(4, false);
+		sorter.setComparator(0, alphaComparator);
+		sorter.setComparator(1, alphaComparator);
+		sorter.setComparator(2, integerComparator);
+		sorter.setComparator(3, doubleComparator);
 		scrollPane.setViewportView(table);
 
 		searchCriteria = new JTextField();
@@ -535,6 +621,7 @@ public class StoreGUI extends JFrame
 					{
 						inventoryList = new Inventory(loadFile.getSelectedFile().toString());
 						model.refreshTable(inventoryList.getInventoryList());
+						JOptionPane.showMessageDialog(frame, "Inventory Succesfully Loaded From File Database.", "File IO", JOptionPane.INFORMATION_MESSAGE);
 					}
 					catch (IOException exception) 
 					{
@@ -559,6 +646,7 @@ public class StoreGUI extends JFrame
 					try 
 					{
 						inventoryList.saveInventory(saveFile.getSelectedFile().toString());
+						JOptionPane.showMessageDialog(frame, "Inventory Succesfully Exported To File Database.", "File IO", JOptionPane.INFORMATION_MESSAGE);
 					}
 					catch (IOException exception) 
 					{
@@ -567,21 +655,17 @@ public class StoreGUI extends JFrame
 				}
 			}
 		});
-
-		/*JMenu sortMenu = new JMenu("Sort");
-		mainMenuBar.add(sortMenu);
-
-		JMenuItem sortByNameMenu = new JMenuItem("Name (Alphabetically)");
-		sortMenu.add(sortByNameMenu);
-
-		JMenuItem sortByTypeMenu = new JMenuItem("Type (Alphabetically)");
-		sortMenu.add(sortByTypeMenu);
-
-		JMenuItem sortByQuantityMenu = new JMenuItem("Quantity");
-		sortMenu.add(sortByQuantityMenu);
-
-		JMenuItem sortByPriceMenu = new JMenuItem("Price");
-		sortMenu.add(sortByPriceMenu);*/
+		
+		JMenuItem aboutButton = new JMenuItem("About");
+		fileMenu.add(aboutButton);
+		
+		aboutButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(frame, "Eric's Convenience Store Program: Beta Version.", "About", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 
 		JButton addButton = new JButton("Add Item");
 		addButton.setBounds(515, 131, 98, 23);
@@ -607,7 +691,7 @@ public class StoreGUI extends JFrame
 			{
 				try
 				{
-					editItemDialogBox(model.getItemData(table.getSelectedRow()));
+					editItemDialogBox(table.getSelectedRow());
 				}
 				catch (ArrayIndexOutOfBoundsException exception)
 				{
@@ -615,11 +699,11 @@ public class StoreGUI extends JFrame
 				}
 			}
 		});
-		
+
 		JButton deleteButton = new JButton("Delete Item");
 		deleteButton.setBounds(515, 199, 98, 25);
 		inventoryPanel.add(deleteButton);
-		
+
 		// Delete Button ActionListener
 		deleteButton.addActionListener(new ActionListener() 
 		{
@@ -630,6 +714,7 @@ public class StoreGUI extends JFrame
 					model.removeRow(table.getSelectedRow());
 					inventoryList.set(model.getRowData());
 					model.refreshTable(inventoryList.getInventoryList());
+					JOptionPane.showMessageDialog(frame, "Item Deleted Successfully.", "Item Deleted", JOptionPane.INFORMATION_MESSAGE);
 				}
 				catch (ArrayIndexOutOfBoundsException exception)
 				{

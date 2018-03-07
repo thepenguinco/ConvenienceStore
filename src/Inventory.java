@@ -19,11 +19,19 @@ public class Inventory
 	 * The delimiter for a space in the file database.
 	 */
 	public static final String MAGIC_SPACE = "\\s";
-	
+
+	public static final int FOOD_ID = 0;
+
+	public static final int DRINK_ID = 1;
+
+	public static final int CIGARETTE_BOX_ID = 2;
+
+	public static final int LOTTERY_TICKET_ID = 3;
+
 	/**
 	 * The valid number of line tokens per line in the file database.
 	 */
-	public static int VALID_LINE_LENGTH = 4;
+	public static final int VALID_LINE_LENGTH = 5;
 
 	// instance fields
 
@@ -63,12 +71,35 @@ public class Inventory
 			String[] line = lineOfText.split(" ");
 			if (line.length == VALID_LINE_LENGTH)
 			{
-				String name = line[0].replace(MAGIC_SPACE, " ");
-				String type = line[1].replace(MAGIC_SPACE, " ");
+				Item item;
+				int typeId = Integer.parseInt(line[0]);
+				String name = line[1].replace(MAGIC_SPACE, " ");
 				int quantity = Integer.parseInt(line[2]);
 				double price = Double.parseDouble(line[3]);
-				// double costPerUnit = Double.parseDouble(line[4]);
-				Item item = new Item(name, type, quantity, price);
+				if (typeId == FOOD_ID)
+				{
+					double weight = Double.parseDouble(line[4]);
+					item = new Food(name, quantity, price, weight);
+				}
+				else if (typeId == DRINK_ID)
+				{
+					double volume = Double.parseDouble(line[4]);
+					item = new Drink(name, quantity, price, volume);
+				}
+				else if (typeId == CIGARETTE_BOX_ID)
+				{
+					String size = line[4];
+					item = new CigaretteBox(name, quantity, price, size);
+				}
+				else if (typeId == LOTTERY_TICKET_ID)
+				{
+					item = new LotteryTicket(name, quantity, price);
+				}
+				else
+				{
+					System.out.println("Corrupt Data! Halting Data Import!");
+					break;
+				}
 				inventoryList.add(item);
 			} // end of if (line.length ...
 			else 
@@ -140,11 +171,34 @@ public class Inventory
 		// Populate database
 		for (Item item : inventoryList)
 		{
-			database.println(item.getItemName().replace(" ", Utility.MAGIC_SPACE)
-					+ " " + item.getType().replace(" ", Utility.MAGIC_SPACE)
+			String information;
+			int typeId = item.getID();
+			if (typeId == FOOD_ID)
+			{
+				information = Double.toString(((Food) item).getWeight());
+			}
+			else if (typeId == DRINK_ID)
+			{
+				information = Double.toString(((Drink) item).getVolume());
+			}
+			else if (typeId == CIGARETTE_BOX_ID)
+			{
+				information = ((CigaretteBox) item).getSize();
+			}
+			else if (typeId == LOTTERY_TICKET_ID)
+			{
+				information = "Placeholder";
+			}
+			else
+			{
+				System.out.println("Corrupt Data! Halting Data Import!");
+				break;
+			}
+			database.println(item.getID()
+					+ " " + item.getItemName().replace(" ", MAGIC_SPACE)
 					+ " " + item.getQuantity()
 					+ " " + item.getPrice()
-					/*+ " " + item.getCostPerUnit()*/);
+					+ " " + information);
 		} // not done
 
 		// wrap up
@@ -153,6 +207,6 @@ public class Inventory
 
 	public void set(ArrayList<Item> rowData) 
 	{
-		inventoryList = rowData;
+		inventoryList = (ArrayList<Item>) rowData.clone();
 	}
 }

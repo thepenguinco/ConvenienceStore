@@ -20,6 +20,12 @@ public class Food extends Item
 	}
 
 	@Override
+	public int getID() 
+	{
+		return Inventory.FOOD_ID;
+	}
+	
+	@Override
 	public String getType() {
 		return "Food";
 	}

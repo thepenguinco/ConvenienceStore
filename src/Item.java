@@ -12,7 +12,6 @@ public abstract class Item
 
 	// instance fields
 
-	private double costPerUnit; // TODO
 	private String name;
 	private double price;
 	private int quantity;
@@ -30,7 +29,9 @@ public abstract class Item
 	} // end of default constructor Item()
 
 	/**
-	 * Constructs a store item with the specified characteristics
+	 * Constructs a store item with the specified characteristics.
+	 * 
+	 * @param 
 	 */
 	public Item(String name, int quantity, double price)
 	{
@@ -40,17 +41,6 @@ public abstract class Item
 	} // end of constructor Item(String name...
 
 	// accessors
-
-	//TODO ?
-	/**
-	 * Return the cost per unit quantity of this item
-	 * 
-	 * @return the cost per unit quantity of this item
-	 */
-	public double getCostPerUnit()
-	{
-		return costPerUnit;
-	} // end of method getCostPerUnit
 
 	/**
 	 * Returns the name of this item
@@ -63,7 +53,7 @@ public abstract class Item
 	} // end of method getItemName()
 
 	/**
-	 * Returns the price of this item
+	 * Returns the price of this item.
 	 * 
 	 * @return the price of this item
 	 */
@@ -73,12 +63,19 @@ public abstract class Item
 	} // end of method getPrice()
 
 	/**
-	 * Returns the type of this item..
+	 * Returns the type of this item.
 	 * 
 	 * @return the type of this item
 	 */
 	public abstract String getType();
-	
+
+	/**
+	 * Returns the type of this item.
+	 * 
+	 * @return the type of this item
+	 */
+	public abstract int getID();
+
 	/**
 	 * Returns the quantity in stock of this item.
 	 * 
@@ -104,16 +101,6 @@ public abstract class Item
 			this.quantity = this.quantity + quantity;
 		}
 	} // end of method addQuantity(int quantity) 
-
-	/**
-	 * Sets the cost per unit of this item.
-	 * 
-	 * @param cost the cost per unit of this item.
-	 */
-	public void setCostPerUnit(int cost)
-	{
-		this.costPerUnit = cost;
-	} // end of method setCostPerUnit(int cost)
 
 	/**
 	 * Sets the name of this item.

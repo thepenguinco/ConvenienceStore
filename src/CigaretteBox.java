@@ -18,13 +18,21 @@ public class CigaretteBox extends Item
 		super(name, quantity, price);
 		this.size = size;
 	}
+	
+	@Override
+	public int getID() 
+	{
+		return Inventory.CIGARETTE_BOX_ID;
+	}
 
 	@Override
-	public String getType() {
+	public String getType() 
+	{
 		return "Cigarettes";
 	}
-	
-	public String getSize() {
+
+	public String getSize() 
+	{
 		return size;
 	}
 	
