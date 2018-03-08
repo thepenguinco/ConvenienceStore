@@ -567,7 +567,7 @@ public class StoreGUI extends JFrame
 		inventoryPanel.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 18, 510, 395);
+		scrollPane.setBounds(0, 18, 510, 371);
 		inventoryPanel.add(scrollPane);
 
 		// Inventory List Initialization

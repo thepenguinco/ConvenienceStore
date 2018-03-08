@@ -157,7 +157,7 @@ public class InventoryTableModel extends AbstractTableModel {
 		case 4:
 			if (item.getType().equals("Food"))
 			{
-				value = ((Food) item).getWeight() + "kg";
+				value = ((Food) item).getWeight() + "g";
 			}
 			else if (item.getType().equals("Drink"))
 			{
