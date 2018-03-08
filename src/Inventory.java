@@ -226,4 +226,84 @@ public class Inventory
 	{
 		inventoryList = (ArrayList<Item>) rowData.clone();
 	} // end of method set(ArrayList<Item> rowData)
+
+	/**
+	 * Sorts this inventory list by name
+	 */
+	public void sortByName() 
+	{
+		Item temp;
+		for (int i = 0; i < inventoryList.size() - 1; i++) 
+		{
+			for (int j = i + 1; j < inventoryList.size(); j++) 
+			{
+				if (inventoryList.get(i).getItemName().compareToIgnoreCase(inventoryList.get(j).getItemName()) > 0)
+				{
+					temp = inventoryList.get(i);
+					inventoryList.set(i, inventoryList.get(j));
+					inventoryList.set(j, temp); 
+				}
+			}
+		}
+	} // end of method sortByName()
+	
+	/**
+	 * Sorts this inventory list by type
+	 */
+	public void sortByType() 
+	{
+		Item temp;
+		for (int i = 0; i < inventoryList.size() - 1; i++) 
+		{
+			for (int j = i + 1; j < inventoryList.size(); j++) 
+			{
+				if (inventoryList.get(i).getType().compareToIgnoreCase(inventoryList.get(j).getType()) > 0)
+				{
+					temp = inventoryList.get(i);
+					inventoryList.set(i, inventoryList.get(j));
+					inventoryList.set(j, temp); 
+				}
+			}
+		}
+	} // end of method sortByType()
+	
+	/**
+	 * Sorts this inventory list by quantity
+	 */
+	public void sortByQuantity() 
+	{
+		Item temp;
+		for (int i = 0; i < inventoryList.size() - 1; i++) 
+		{
+			for (int j = i + 1; j < inventoryList.size(); j++) 
+			{
+				if (inventoryList.get(i).getQuantity() > inventoryList.get(j).getQuantity())
+				{
+					temp = inventoryList.get(i);
+					inventoryList.set(i, inventoryList.get(j));
+					inventoryList.set(j, temp); 
+				}
+			}
+		}
+	} // end of method sortByQuantity()
+	
+	/**
+	 * Sorts this inventory list by price
+	 */
+	public void sortByPrice() 
+	{
+		Item temp;
+		for (int i = 0; i < inventoryList.size() - 1; i++) 
+		{
+			for (int j = i + 1; j < inventoryList.size(); j++) 
+			{
+				if (inventoryList.get(i).getPrice() > inventoryList.get(j).getPrice())
+				{
+					temp = inventoryList.get(i);
+					inventoryList.set(i, inventoryList.get(j));
+					inventoryList.set(j, temp); 
+				}
+			}
+		}
+	} // end of method sortByPrice()
 }

@@ -259,7 +259,7 @@ public class StoreGUI extends JFrame
 		JTextField quantity = new JTextField();
 		JLabel priceLabel = new JLabel("Price:");
 		JTextField price = new JTextField();
-		JLabel weightLabel = new JLabel("Weight (kg):");
+		JLabel weightLabel = new JLabel("Weight (g):");
 		JTextField weight = new JTextField();
 		JLabel volumeLabel = new JLabel("Volume (ml):");
 		JTextField volume = new JTextField();
@@ -575,13 +575,6 @@ public class StoreGUI extends JFrame
 		model = new InventoryTableModel();
 		table = new JTable(model);
 		table.getColumnModel().getColumn(3).setCellRenderer(new PriceCellRenderer());
-		sorter = new TableRowSorter<InventoryTableModel>(model);
-		table.setRowSorter(sorter);
-		sorter.setSortable(4, false);
-		sorter.setComparator(0, alphaComparator);
-		sorter.setComparator(1, alphaComparator);
-		sorter.setComparator(2, integerComparator);
-		sorter.setComparator(3, doubleComparator);
 		scrollPane.setViewportView(table);
 
 		searchCriteria = new JTextField();
@@ -647,7 +640,7 @@ public class StoreGUI extends JFrame
 		});
 
 		// export inventory to file action listener
-		JMenuItem exportInventoryButton = new JMenuItem("Export inventory from file");
+		JMenuItem exportInventoryButton = new JMenuItem("Export inventory to file");
 		fileMenu.add(exportInventoryButton);
 
 		exportInventoryButton.addActionListener(new ActionListener() 
@@ -674,6 +667,48 @@ public class StoreGUI extends JFrame
 		
 		JMenuItem aboutButton = new JMenuItem("About");
 		fileMenu.add(aboutButton);
+		
+		JMenu sortMenu = new JMenu("Sort");
+		mainMenuBar.add(sortMenu);
+		
+		JMenuItem nameSortButton = new JMenuItem("Sort by Name");
+		nameSortButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				inventoryList.sortByName();
+				model.refreshTable(inventoryList.getInventoryList());
+			}
+		});
+		sortMenu.add(nameSortButton);
+		
+		JMenuItem typeSortButton = new JMenuItem("Sort by Type");
+		sortMenu.add(typeSortButton);
+		
+		typeSortButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				inventoryList.sortByType();
+				model.refreshTable(inventoryList.getInventoryList());
+			}
+		});
+		
+		JMenuItem quantitySortButton = new JMenuItem("Sort by Quantity");
+		sortMenu.add(quantitySortButton);
+		
+		quantitySortButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				inventoryList.sortByQuantity();
+				model.refreshTable(inventoryList.getInventoryList());
+			}
+		});
+		
+		JMenuItem priceSortButton = new JMenuItem("Sort by Price");
+		sortMenu.add(priceSortButton);
+		
+		priceSortButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				inventoryList.sortByPrice();
+				model.refreshTable(inventoryList.getInventoryList());
+			}
+		});
 		
 		aboutButton.addActionListener(new ActionListener() 
 		{
