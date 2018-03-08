@@ -1,6 +1,16 @@
+import java.awt.Component;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * An inventory table model that displays data from the inventory list in a JTable
@@ -12,8 +22,28 @@ public class InventoryTableModel extends AbstractTableModel {
 
 	// class fields
 
-	public final static NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance();
+	/**
+	 * The delimiter for a space in the file database.
+	 */
+	public static final String MAGIC_SPACE = "\\s";
 
+	public static final int FOOD_ID = 0;
+
+	public static final int DRINK_ID = 1;
+
+	public static final int CIGARETTE_BOX_ID = 2;
+
+	public static final int LOTTERY_TICKET_ID = 3;
+
+	/**
+	 * The valid number of line tokens per line in the file database.
+	 */
+	public static final int VALID_LINE_LENGTH = 5;
+
+
+	/**
+	 * Table column headers
+	 */
 	public final static String[] COLUMN_NAMES = {
 			"Name",
 			"Type",
@@ -23,6 +53,7 @@ public class InventoryTableModel extends AbstractTableModel {
 	};
 
 	// instance fields
+	
 	private ArrayList<Item> rowData;
 
 	/**
@@ -33,6 +64,11 @@ public class InventoryTableModel extends AbstractTableModel {
 		rowData = new ArrayList<Item>();
 	} // end of constructor 
 
+	/**
+	 * Refreshes the list displayed with the specified list.
+	 * 
+	 * @param inventoryList the inventoryList to be displayed
+	 */
 	public void refreshTable(ArrayList<Item> inventoryList) 
 	{
 		rowData.clear();
@@ -40,16 +76,31 @@ public class InventoryTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
+	/**
+	 * Removes 
+	 * 
+	 * @param row
+	 */
 	public void removeRow(int row) 
 	{
 		rowData.remove(row);
 	}
 
+	/**
+	 * Returns the table row data.
+	 * 
+	 * @return the table row data
+	 */
 	public void setRow(int row, Item item)
 	{
 		rowData.set(row, item);
 	}
 
+	/**
+	 * Returns the table row data.
+	 * 
+	 * @return the table row data
+	 */
 	public ArrayList<Item> getRowData()
 	{
 		return rowData;
@@ -73,6 +124,12 @@ public class InventoryTableModel extends AbstractTableModel {
 		return COLUMN_NAMES[column];
 	}
 
+	/**
+	 * Returns the item data of the selected row.
+	 * 
+	 * @param row the selected row in this table
+	 * @return the Item representation of the data at the specified row
+	 */
 	public Item getItemData(int row) 
 	{
 		return rowData.get(row);
@@ -95,7 +152,7 @@ public class InventoryTableModel extends AbstractTableModel {
 			value = item.getQuantity();
 			break;
 		case 3:
-			value = CURRENCY_FORMAT.format(item.getPrice());
+			value = item.getPrice();
 			break;
 		case 4:
 			if (item.getType().equals("Food"))
@@ -110,7 +167,6 @@ public class InventoryTableModel extends AbstractTableModel {
 			{
 				value = ((CigaretteBox) item).getSize();
 			}
-			//else if (item.getType().equals("Lottery Ticket"))
 			else
 			{
 				value = "";
@@ -118,4 +174,14 @@ public class InventoryTableModel extends AbstractTableModel {
 		}
 		return value;
 	}
+	
+	/**
+	 * Synchronizes the table model with this inventory list.
+	 * 
+	 * @param rowData the row data of the table model
+	 */
+	public void set(ArrayList<Item> inventoryList) 
+	{
+		rowData = (ArrayList<Item>) inventoryList.clone();
+	} // end of method set(ArrayList<Item> inventoryList)
 }

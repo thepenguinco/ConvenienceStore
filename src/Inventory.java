@@ -20,12 +20,24 @@ public class Inventory
 	 */
 	public static final String MAGIC_SPACE = "\\s";
 
+	/**
+	 * The ID of a food item.
+	 */
 	public static final int FOOD_ID = 0;
 
+	/**
+	 * The ID of a drink item.
+	 */
 	public static final int DRINK_ID = 1;
 
+	/**
+	 * The ID of a cigarette box item.
+	 */
 	public static final int CIGARETTE_BOX_ID = 2;
 
+	/**
+	 * The ID of a lottery ticket item.
+	 */
 	public static final int LOTTERY_TICKET_ID = 3;
 
 	/**
@@ -205,8 +217,13 @@ public class Inventory
 		database.close();
 	} // end of method saveInventory(final String fileName...
 
+	/**
+	 * Synchronizes the table model with this inventory list.
+	 * 
+	 * @param rowData the row data of the table model
+	 */
 	public void set(ArrayList<Item> rowData) 
 	{
 		inventoryList = (ArrayList<Item>) rowData.clone();
-	}
+	} // end of method set(ArrayList<Item> rowData)
 }

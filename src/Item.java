@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * An item belonging to the convenience store inventory.
  * 
@@ -19,7 +17,7 @@ public abstract class Item
 	// constructors
 
 	/**
-	 * Constructs a store item with default characteristics
+	 * Constructs a store item with default characteristics.
 	 */
 	public Item()
 	{
@@ -31,7 +29,9 @@ public abstract class Item
 	/**
 	 * Constructs a store item with the specified characteristics.
 	 * 
-	 * @param 
+	 * @param name the name of this item
+	 * @param quantity the initial quantity of this item
+	 * @param price the initial price of this item
 	 */
 	public Item(String name, int quantity, double price)
 	{
@@ -43,7 +43,7 @@ public abstract class Item
 	// accessors
 
 	/**
-	 * Returns the name of this item
+	 * Returns the name of this item.
 	 * 
 	 * @return the name of this item
 	 */
@@ -70,9 +70,9 @@ public abstract class Item
 	public abstract String getType();
 
 	/**
-	 * Returns the type of this item.
+	 * Returns the type ID of this item.
 	 * 
-	 * @return the type of this item
+	 * @return the type ID of this item
 	 */
 	public abstract int getID();
 
@@ -141,7 +141,7 @@ public abstract class Item
 	} // end of method setPrice(double price)
 
 	/**
-	 * Removes the specified quantity from stock
+	 * Removes the specified quantity from stock.
 	 * 
 	 * @param quantity the quantity to remove from stock.
 	 * @pre specified quantity must be a non-negative integer
@@ -153,4 +153,4 @@ public abstract class Item
 			this.quantity = this.quantity - quantity;
 		}
 	} // end of removeQuantity(int quantity) 
-}
+} // end of class Item

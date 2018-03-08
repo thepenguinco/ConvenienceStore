@@ -59,7 +59,7 @@ public class StoreGUI extends JFrame
 	/**
 	 * String array containing all the item types available at this store
 	 */
-	public static final String[] ITEM_TYPES = {"Food", "Drink", "Cigarettes", "Lottery Ticket"};
+	public static final String[] ITEM_TYPES = {"Food", "Drink", "Cigarette Box", "Lottery Ticket"};
 
 	/**
 	 * String array containing all the cigarette box sizes available at this store
@@ -74,6 +74,7 @@ public class StoreGUI extends JFrame
 	static StoreGUI frame = new StoreGUI();
 
 	// instance fields
+	
 	private JPanel contentPane;
 	private JTextField searchCriteria;
 	private JTable table;
@@ -82,6 +83,7 @@ public class StoreGUI extends JFrame
 	private TableRowSorter<InventoryTableModel> sorter;
 
 	// private methods
+	
 	/*
 	 * Dialog box for adding items to the inventory management system
 	 */
@@ -95,7 +97,7 @@ public class StoreGUI extends JFrame
 		JTextField quantity = new JTextField();
 		JLabel priceLabel = new JLabel("Price:");
 		JTextField price = new JTextField();
-		JLabel weightLabel = new JLabel("Weight (kg):");
+		JLabel weightLabel = new JLabel("Weight (g):");
 		JTextField weight = new JTextField();
 		JLabel volumeLabel = new JLabel("Volume (ml):");
 		JTextField volume = new JTextField();
@@ -277,7 +279,7 @@ public class StoreGUI extends JFrame
 		name.setText(item.getItemName());
 		quantity.setText(Integer.toString(item.getQuantity()));
 		price.setText(Double.toString(item.getPrice()));
-		category.setSelectedItem(item.getType());
+		category.setSelectedItem(ITEM_TYPES[typeId]);
 		if (typeId == Inventory.FOOD_ID)
 		{
 			weightLabel.setVisible(true);
@@ -320,7 +322,6 @@ public class StoreGUI extends JFrame
 			sizeLabel.setVisible(false);
 			size.setVisible(false);
 		}
-
 		category.addItemListener(new ItemListener() 
 		{
 			@Override
@@ -436,7 +437,6 @@ public class StoreGUI extends JFrame
 						{
 							item = null;
 						}
-						inventoryList.addItem(item);
 						model.setRow(row, item);
 						inventoryList.set(model.getRowData());
 						model.refreshTable(inventoryList.getInventoryList());
@@ -463,49 +463,64 @@ public class StoreGUI extends JFrame
 	{
 		if (text.isEmpty())
 		{
+			// display the entire inventory list
 			model.refreshTable(inventoryList.getInventoryList());	
 		}
 		else
 		{
+			// filter the list according to the input text
 			ArrayList<Item>searchList = new ArrayList<Item>();
 			for (Item item : inventoryList.getInventoryList())
 			{
-				if (item.getItemName().toLowerCase().contains(text.toLowerCase()) || item.getType().toLowerCase().contains(text.toLowerCase())
-						|| Integer.toString(item.getQuantity()).contains(text) || Double.toString(item.getPrice()).contains(text))
+				if (item.getItemName().toLowerCase().contains(text.toLowerCase()) 
+						|| item.getType().toLowerCase().contains(text.toLowerCase())
+						|| Integer.toString(item.getQuantity()).contains(text) 
+						|| Double.toString(item.getPrice()).contains(text))
 				{
 					searchList.add(item);
 				}
 			}
 			model.refreshTable(searchList);
+			// ensure that the table is synced with the inventory list
 		}
-	}
+	} // end of method search()
 
+	/*
+	 * Comparator for sorting string values
+	 */
 	Comparator alphaComparator = new Comparator<String>()
 	{
 		@Override
 		public int compare(String string1, String string2)
 		{
+			// Convert any upper case letters into lower case letters
+			string1 = string1.toLowerCase();
+			string2 = string2.toLowerCase();
 			return string1.compareTo(string2);
 		}        
 	};
-
+	
+	/*
+	 * Comparator for sorting double values
+	 */
 	Comparator doubleComparator = new Comparator<Double>()
 	{
 		@Override
 		public int compare(Double number1, Double number2) {
-			if (number1 < number2) return -1;
-			if (number2 > number1) return 1;
+			if (number1 > number2) return 1;
+			else if (number1 < number2) return -1;
 			return 0;
 		}        
 	};
 
+	/*
+	 * Comparator for sorting integer values
+	 */
 	Comparator integerComparator = new Comparator<Integer>()
 	{
 		@Override
 		public int compare(Integer number1, Integer number2) {
-			if (number1 < number2) return -1;
-			if (number2 > number1) return 1;
-			return 0;
+			return number1 - number2;
 		}        
 	};
 
@@ -559,6 +574,7 @@ public class StoreGUI extends JFrame
 		inventoryList = new Inventory();
 		model = new InventoryTableModel();
 		table = new JTable(model);
+		table.getColumnModel().getColumn(3).setCellRenderer(new PriceCellRenderer());
 		sorter = new TableRowSorter<InventoryTableModel>(model);
 		table.setRowSorter(sorter);
 		sorter.setSortable(4, false);
@@ -582,14 +598,11 @@ public class StoreGUI extends JFrame
 		searchButton.setBounds(515, 78, 99, 25);
 		inventoryPanel.add(searchButton);
 
+		// Search button Action Listener
 		searchButton.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				/*long b = System.currentTimeMillis();
-				String s = String.valueOf(b);
-				Date t = new Date(b);
-				JOptionPane.showMessageDialog(frame, t, s, JOptionPane.WARNING_MESSAGE);*/
 				search(searchCriteria.getText());
 			}
 		});
@@ -604,6 +617,7 @@ public class StoreGUI extends JFrame
 		JMenuItem loadInventoryButton = new JMenuItem("Load inventory from file");
 		fileMenu.add(loadInventoryButton);
 
+		// Load inventory from file action listener
 		loadInventoryButton.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -625,12 +639,14 @@ public class StoreGUI extends JFrame
 					}
 					catch (IOException exception) 
 					{
-						exception.printStackTrace();
+						JOptionPane.showMessageDialog(frame, "File Load Error", "File IO", JOptionPane.ERROR_MESSAGE);
+						// exception.printStackTrace();
 					}
 				}
 			}
 		});
 
+		// export inventory to file action listener
 		JMenuItem exportInventoryButton = new JMenuItem("Export inventory from file");
 		fileMenu.add(exportInventoryButton);
 
@@ -663,7 +679,7 @@ public class StoreGUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(frame, "Eric's Convenience Store Program: Beta Version.", "About", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "Convenience Store Program", "About", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
@@ -703,7 +719,7 @@ public class StoreGUI extends JFrame
 		JButton deleteButton = new JButton("Delete Item");
 		deleteButton.setBounds(515, 199, 98, 25);
 		inventoryPanel.add(deleteButton);
-
+		
 		// Delete Button ActionListener
 		deleteButton.addActionListener(new ActionListener() 
 		{
@@ -722,8 +738,5 @@ public class StoreGUI extends JFrame
 				}
 			}
 		});
-
-		JPanel transactionPanel = new JPanel();
-		tabbedPane.addTab("Process Transactions", null, transactionPanel, null);
 	}
 }
