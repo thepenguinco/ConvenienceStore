@@ -485,45 +485,6 @@ public class StoreGUI extends JFrame
 		}
 	} // end of method search()
 
-	/*
-	 * Comparator for sorting string values
-	 */
-	Comparator alphaComparator = new Comparator<String>()
-	{
-		@Override
-		public int compare(String string1, String string2)
-		{
-			// Convert any upper case letters into lower case letters
-			string1 = string1.toLowerCase();
-			string2 = string2.toLowerCase();
-			return string1.compareTo(string2);
-		}        
-	};
-	
-	/*
-	 * Comparator for sorting double values
-	 */
-	Comparator doubleComparator = new Comparator<Double>()
-	{
-		@Override
-		public int compare(Double number1, Double number2) {
-			if (number1 > number2) return 1;
-			else if (number1 < number2) return -1;
-			return 0;
-		}        
-	};
-
-	/*
-	 * Comparator for sorting integer values
-	 */
-	Comparator integerComparator = new Comparator<Integer>()
-	{
-		@Override
-		public int compare(Integer number1, Integer number2) {
-			return number1 - number2;
-		}        
-	};
-
 	/**
 	 * Launch the main application.
 	 */
