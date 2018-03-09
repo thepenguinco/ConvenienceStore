@@ -60,7 +60,7 @@ public class Inventory
 	} // end of constructor Account()
 
 	/**
-	 * Constructs a inventory list from a file database.
+	 * Constructs an inventory list from a file database.
 	 * 
 	 * @param fileName the file name of the database
 	 * @throws IOException
@@ -69,17 +69,16 @@ public class Inventory
 	{
 		inventoryList = new ArrayList<Item>();
 
-		// Establish connections to the text files
+		// Establish connection to the file database
 		BufferedReader database = new BufferedReader(new FileReader(fileName));
 
-		// Read from the first file
+		// Read the first line
 		String lineOfText = database.readLine();
 
 		while (true)
 		{
 			lineOfText = database.readLine();
 			if (lineOfText == null) break;
-			// System.out.println(lineOfText);
 			String[] line = lineOfText.split(" ");
 			if (line.length == VALID_LINE_LENGTH)
 			{
@@ -109,16 +108,13 @@ public class Inventory
 				}
 				else
 				{
-					System.out.println("Corrupt Data! Halting Data Import!");
-					break;
+					throw new IOException();
 				}
 				inventoryList.add(item);
 			} // end of if (line.length ...
 			else 
 			{
-				System.out.println("Your database is corrupt!");
-				System.out.println("Halting program!");
-				System.exit(0);
+				throw new IOException();
 			} // end of else
 		} // end of while (true)
 
